@@ -22,7 +22,7 @@
 
 4. **Load the Unpacked Extension:**
    - Click on the "Load unpacked" button.
-   - Select the (unpacked) folder where you extracted the extension files.
+   - Select the (unpacked) folder named **ElabXCS** where you extracted the extension files.
 
 5. **Use the Extension:**
    - Once loaded, click on the extension icon in the Chrome toolbar.
