@@ -77,6 +77,37 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
+  // New: Handle contribute button click
+  const contributeBtn = document.getElementById('contributeBtn');
+  if (contributeBtn) {
+    contributeBtn.addEventListener('click', function() {
+      chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, { action: 'contribute' }, function(response) {
+          if (!response) {
+            showNotification('Error', 'Could not retrieve contribution data from the page.');
+            return;
+          }
+          if (response.exists) {
+            showNotification('Already Exists', 'This question already exists in the database.');
+          } else {
+            const extractedKey = response.key;
+            const editorContent = response.editorContent;
+            const contributionData = {
+              key: extractedKey,
+              content: `\n${editorContent}\n`
+            };
+            const contributionText = JSON.stringify(contributionData, null, 2);
+            navigator.clipboard.writeText(contributionText).then(function() {
+              showNotification('Contribution Copied', 'Contribution data has been copied to clipboard.');
+            }).catch(function(err) {
+              showNotification('Error', 'Failed to copy to clipboard.');
+            });
+          }
+        });
+      });
+    });
+  }
+  
   // Listen for messages from content script
   chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.action === 'foundSolution') {

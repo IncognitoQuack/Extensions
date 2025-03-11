@@ -157,13 +157,11 @@
   
   // Advanced Edit Mode:
   // Enable Ace editor editing and remove any restrictions on text selection and copying.
-  // This includes clearing inline event handlers, injecting a CSS override, adding capturing listeners,
-  // and overriding addEventListener to block any new restrictions.
+  // Instead of injecting inline script, we now create a blob URL for the script and load it as an external file.
   function enableEditMode() {
     if (!hasAceEditor()) return;
     try {
-      const scriptContent = `
-        (function() {
+      const scriptContent = `(function() {
           try {
             // Ace editor modifications
             const editorEl = document.querySelector('.ace_editor');
@@ -228,12 +226,16 @@
           } catch (error) {
             console.error("Error enabling advanced edit mode:", error);
           }
-        })();
-      `;
+        })();`;
+      const blob = new Blob([scriptContent], { type: 'text/javascript' });
+      const scriptUrl = URL.createObjectURL(blob);
       const scriptEl = document.createElement('script');
-      scriptEl.textContent = scriptContent;
+      scriptEl.src = scriptUrl;
+      scriptEl.onload = function() {
+         URL.revokeObjectURL(scriptUrl);
+         scriptEl.remove();
+      };
       document.head.appendChild(scriptEl);
-      scriptEl.remove();
       console.log("Advanced edit mode script injected.");
     } catch (error) {
       console.error("Error in enableEditMode:", error);
@@ -248,9 +250,7 @@
     console.log("Advanced edit mode disabled.");
   }
   
-  // New: Listen for custom snippet extraction requests.
-  // The message should contain 'initialPhrase' and 'numChars'. We search the page text (case-insensitive)
-  // for the first occurrence of the initial phrase, then extract that phrase plus the next n characters.
+  // Listen for messages from background or popup scripts
   chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.action === "pasteText") {
       pasteCode(message.text);
@@ -286,6 +286,36 @@
         action: "customSnippetExtracted",
         snippet: snippet
       });
+    } else if (message.action === "contribute") {
+      // New contribution action
+      const extractedKey = extractProblemDescription();
+      const matchingSolution = findMatchingSolution(extractedKey);
+      if (matchingSolution) {
+        // If a matching solution is found, notify that the question already exists.
+        sendResponse({ exists: true });
+      } else {
+        let editorContent = "";
+        if (window.ace && typeof ace.edit === "function") {
+          let editorEl = document.querySelector('.ace_editor');
+          if (editorEl) {
+            if (!editorEl.id) editorEl.id = "ace-editor";
+            const editor = ace.edit(editorEl.id);
+            editorContent = editor.getValue();
+          }
+        }
+        // If no content from the Ace editor, try fallback method.
+        if (!editorContent) {
+          const fallbackContainer = document.querySelector("#ace-editor");
+          if (fallbackContainer) {
+            const textInput = fallbackContainer.querySelector(".ace_text-input");
+            if (textInput) {
+              editorContent = textInput.value;
+            }
+          }
+        }
+        sendResponse({ exists: false, key: extractedKey, editorContent: editorContent });
+      }
+      return true;
     }
   });
   
