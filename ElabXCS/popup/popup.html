@@ -33,10 +33,31 @@
         </label>
         <p class="helper-text">Enable editing features</p>
       </div>
+      
+      <!-- New section for custom snippet extraction (hidden by default) -->
+      <div class="custom-snippet" id="customSnippetSection" style="display: none;">
+        <h3>Extract Custom Snippet</h3>
+        <div class="input-group">
+          <input type="text" id="initialPhraseInput" placeholder="Enter initial phrase">
+        </div>
+        <div class="input-group">
+          <input type="number" id="numCharsInput" placeholder="Number of characters">
+        </div>
+        <div class="actions">
+          <button id="extractSnippetBtn">Extract Snippet</button>
+        </div>
+        <div class="input-group">
+          <textarea id="customSnippetOutput" placeholder="Extracted snippet will appear here..." readonly></textarea>
+        </div>
+      </div>
+      <!-- End new section -->
+      
     </div>
     
     <div class="footer">
-      <p title="We built this tool to help you bypass Elab's security measures. While the current answers are limited, your contributions can empower our community.">~ <b>Cheetah</b>-<b>Sher</b> (CS)</p>
+      <p title="We built this tool to help you bypass Elab's security measures. While the current answers are limited, your contributions can empower our community.">
+        ~ <b>Cheetah</b>-<b>Sher</b> (CS)
+      </p>
     </div>
   </div>
   <script src="popup.js"></script>

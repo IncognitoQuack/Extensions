@@ -198,3 +198,48 @@
       opacity: 1;
     }
   }
+
+/* Custom Snippet Extraction Section */
+.custom-snippet {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.custom-snippet h3 {
+  font-size: 18px;
+  color: #2563eb;
+  margin-bottom: 8px;
+}
+
+.custom-snippet .input-group {
+  margin-bottom: 12px;
+}
+
+.custom-snippet input,
+.custom-snippet textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.custom-snippet button {
+  width: 100%;
+  padding: 10px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.custom-snippet button:hover {
+  background-color: #1d4ed8;
+}

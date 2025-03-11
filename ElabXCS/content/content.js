@@ -60,7 +60,7 @@
     return document.body.innerText || document.body.textContent || "";
   }
   
-  // Extract problem description: look for marker and log next 51 characters as EXTfromP
+  // Extract problem description: look for marker and log next 52 characters as EXTfromP
   function extractProblemDescription() {
     const pageText = extractPageText();
     const markers = [
@@ -74,7 +74,7 @@
       const idx = pageText.indexOf(marker);
       if (idx !== -1) {
         const start = idx + marker.length;
-        const snippet = pageText.substring(start, start + 51).trim();
+        const snippet = pageText.substring(start, start + 52).trim();
         console.log("EXTfromP:", snippet);
         return snippet;
       }
@@ -82,7 +82,7 @@
     return null;
   }
   
-  // Find matching solution from QNA database using normalized strings and a threshold of 65%
+  // Find matching solution from QNA database using normalized strings and a threshold of 53%
   function findMatchingSolution(extractedSnippet) {
     if (!extractedSnippet) return null;
     const normExtracted = normalizeText(extractedSnippet);
@@ -155,13 +155,17 @@
     pasteCodeWithRetry(snippet);
   }
   
-  // Enable advanced editing features by injecting a script into the page context
+  // Advanced Edit Mode:
+  // Enable Ace editor editing and remove any restrictions on text selection and copying.
+  // This includes clearing inline event handlers, injecting a CSS override, adding capturing listeners,
+  // and overriding addEventListener to block any new restrictions.
   function enableEditMode() {
     if (!hasAceEditor()) return;
     try {
       const scriptContent = `
         (function() {
           try {
+            // Ace editor modifications
             const editorEl = document.querySelector('.ace_editor');
             const aceEditor = ace.edit(editorEl.id || "ace-editor");
             aceEditor.setReadOnly(false);
@@ -172,20 +176,57 @@
               copyWithEmptySelection: true
             });
             aceEditor.commands.removeCommands(['cut', 'copy', 'paste']);
-            document.oncopy = null;
-            document.oncut = null;
-            document.onpaste = null;
-            document.oncontextmenu = null;
-            document.addEventListener('copy', (e) => true, true);
-            document.addEventListener('cut', (e) => true, true);
-            document.addEventListener('paste', (e) => true, true);
+            
+            // Clear inline event handlers on document and all elements
+            document.oncopy = document.oncut = document.onpaste = document.oncontextmenu = document.onselectstart = null;
+            document.querySelectorAll('*').forEach(el => {
+              el.oncopy = el.oncut = el.onpaste = el.oncontextmenu = el.onselectstart = null;
+            });
+            
+            // Inject CSS to force text selection
+            let styleEl = document.getElementById('enable-edit-mode-style');
+            if (!styleEl) {
+              styleEl = document.createElement('style');
+              styleEl.id = 'enable-edit-mode-style';
+              styleEl.innerHTML = \`
+                * {
+                  -webkit-user-select: text !important;
+                  -moz-user-select: text !important;
+                  -ms-user-select: text !important;
+                  user-select: text !important;
+                }
+              \`;
+              document.head.appendChild(styleEl);
+            }
+            
+            // Add capturing listeners to override any blocking on key events
+            const overrideEvents = ['copy', 'cut', 'paste', 'contextmenu', 'selectstart', 'dragstart'];
+            overrideEvents.forEach(ev => {
+              document.addEventListener(ev, function(e) {
+                e.stopPropagation();
+              }, true);
+            });
+            
+            // Override addEventListener to ignore adding handlers for blocked events
+            (function() {
+              const originalAddEventListener = EventTarget.prototype.addEventListener;
+              EventTarget.prototype.addEventListener = function(type, listener, options) {
+                const blockedEvents = ['copy', 'cut', 'paste', 'contextmenu', 'selectstart', 'dragstart'];
+                if (blockedEvents.includes(type)) {
+                  return;
+                }
+                return originalAddEventListener.call(this, type, listener, options);
+              };
+            })();
+            
+            // Expose a function to paste code into the editor
             window.elabxcsPaste = function(text) {
               aceEditor.setValue(text, -1);
               return true;
             };
-            console.log("Edit mode enabled");
+            console.log("Advanced Edit mode enabled: text selection and copy restored.");
           } catch (error) {
-            console.error("Error enabling edit mode:", error);
+            console.error("Error enabling advanced edit mode:", error);
           }
         })();
       `;
@@ -193,31 +234,23 @@
       scriptEl.textContent = scriptContent;
       document.head.appendChild(scriptEl);
       scriptEl.remove();
-      console.log("Edit mode script injected");
+      console.log("Advanced edit mode script injected.");
     } catch (error) {
       console.error("Error in enableEditMode:", error);
     }
   }
   
   function disableEditMode() {
-    console.log("Edit mode disabled");
-  }
-  
-  // Extract problem description, find matching solution, and send it to the popup
-  function extractAndFindSolution() {
-    const snippet = extractProblemDescription();
-    const solution = findMatchingSolution(snippet);
-    if (solution) {
-      chrome.runtime.sendMessage({
-        action: "foundSolution",
-        solution: solution
-      });
-    } else {
-      console.log("No matching solution found");
+    const styleEl = document.getElementById('enable-edit-mode-style');
+    if (styleEl) {
+      styleEl.remove();
     }
+    console.log("Advanced edit mode disabled.");
   }
   
-  // Listen for messages from the popup
+  // New: Listen for custom snippet extraction requests.
+  // The message should contain 'initialPhrase' and 'numChars'. We search the page text (case-insensitive)
+  // for the first occurrence of the initial phrase, then extract that phrase plus the next n characters.
   chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.action === "pasteText") {
       pasteCode(message.text);
@@ -226,7 +259,33 @@
       if (editModeEnabled) enableEditMode();
       else disableEditMode();
     } else if (message.action === "extractProblem") {
-      extractAndFindSolution();
+      const snippet = extractProblemDescription();
+      const solution = findMatchingSolution(snippet);
+      if (solution) {
+        chrome.runtime.sendMessage({
+          action: "foundSolution",
+          solution: solution
+        });
+      } else {
+        console.log("No matching solution found");
+      }
+    } else if (message.action === "extractCustomSnippet") {
+      const initialPhrase = message.initialPhrase;
+      const numChars = parseInt(message.numChars, 10);
+      const fullText = extractPageText();
+      const lowerFullText = fullText.toLowerCase();
+      const lowerPhrase = initialPhrase.toLowerCase();
+      const index = lowerFullText.indexOf(lowerPhrase);
+      let snippet = "";
+      if (index !== -1) {
+        snippet = fullText.substr(index, initialPhrase.length + numChars);
+      } else {
+        snippet = "Phrase not found in page text.";
+      }
+      chrome.runtime.sendMessage({
+        action: "customSnippetExtracted",
+        snippet: snippet
+      });
     }
   });
   
@@ -239,7 +298,16 @@
   });
   
   // Run problem extraction 1 second after load
-  setTimeout(extractAndFindSolution, 1000);
+  setTimeout(function() {
+    const snippet = extractProblemDescription();
+    const solution = findMatchingSolution(snippet);
+    if (solution) {
+      chrome.runtime.sendMessage({
+        action: "foundSolution",
+        solution: solution
+      });
+    }
+  }, 1000);
   
   // Observe DOM changes to detect if Ace editor is added later
   const observer = new MutationObserver(function(mutations) {
