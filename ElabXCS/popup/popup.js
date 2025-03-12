@@ -3,8 +3,55 @@ document.addEventListener('DOMContentLoaded', function() {
   const pasteBtn = document.getElementById('pasteBtn');
   const editToggle = document.getElementById('editToggle');
   const extractBtn = document.getElementById('extractBtn');
-  const customSnippetSection = document.getElementById('customSnippetSection'); // New section
+  const customSnippetSection = document.getElementById('customSnippetSection'); 
+  const activationInput = document.getElementById('activationInput');
+  const activateBtn = document.getElementById('activateBtn');
 
+  extractBtn.disabled = true;
+  editToggle.disabled = true;
+
+  //constants activation
+  const encryptionKey = '2L3d!#@$F@Fq$DFgdGW';
+  const encryptedCode = 'U2FsdGVkX18aMXPfCX0WJZRi1zA+liBDvpVjrmJ0CPQ=';
+
+  // Function to decrypt activation code using CryptoJS
+  function decryptActivationCode(encrypted, key) {
+    try {
+      const bytes = CryptoJS.AES.decrypt(encrypted, key);
+      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+      return decrypted;
+    } catch (error) {
+      console.error('Decryption error:', error);
+      return null;
+    }
+  }
+  
+  // Check if activation has been done previously; if so, enable features and hide activation section
+  chrome.storage.local.get(['activationDone'], function(result) {
+    if (result.activationDone) {
+      extractBtn.disabled = false;
+      editToggle.disabled = false;
+      document.querySelector('.activation-section').style.display = 'none';
+    }
+  });
+  
+  // Handle activation button click
+  activateBtn.addEventListener('click', function() {
+    const userCode = activationInput.value.trim();
+    const actualCode = decryptActivationCode(encryptedCode, encryptionKey);
+    if (userCode === actualCode) {
+      // Activation successful: enable blocked elements
+      extractBtn.disabled = false;
+      editToggle.disabled = false;
+      showNotification('Activation Successful', 'Features unlocked.');
+      // Hide the activation section and save activation state
+      document.querySelector('.activation-section').style.display = 'none';
+      chrome.storage.local.set({ activationDone: true });
+    } else {
+      showNotification('Activation Failed', 'Incorrect activation code.');
+    }
+  });
+  
   // Function to update visibility of the custom snippet section based on Edit Mode
   function updateCustomSnippetVisibility() {
     if (editToggle.checked) {
@@ -77,7 +124,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
   
-  // New: Handle contribute button click
   const contributeBtn = document.getElementById('contributeBtn');
   if (contributeBtn) {
     contributeBtn.addEventListener('click', function() {

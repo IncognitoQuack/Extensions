@@ -5,12 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="popup.css">
   <title>ElabXCS</title>
+  <script src="crypto-js.min.js"></script>
 </head>
 <body>
   <div class="container">
     <div class="header">
       <h1>ElabXCS</h1>
-      <p title="Under devlopment">Beta version</p>
+      <!-- <p title="Under devlopment">Beta version</p> -->
+    </div>
+    
+    <div class="activation-section" title="Ask Admin for activation code">
+      <input type="password" id="activationInput" placeholder="Enter activation code">
+      <button id="activateBtn">Activate</button>
     </div>
     
     <div class="content">
@@ -31,7 +37,7 @@
             <span class="slider"></span>
           </div>
         </label>
-        <p class="helper-text">Enable editing features</p>
+        <!-- <p class="helper-text">Enable editing features</p> -->
       </div>
       <br>
       <hr>

@@ -8,7 +8,6 @@
     });
 
   let editModeEnabled = false;
-  let hasAskedOverwrite = false;
   
   // Normalizes text: trim, lowercase, collapse whitespace, and remove punctuation (except apostrophes)
   function normalizeText(str) {
@@ -112,10 +111,9 @@
         if (!editorEl) throw new Error("Ace editor not found.");
         if (!editorEl.id) editorEl.id = "ace-editor";
         const editor = ace.edit(editorEl.id);
-        const existing = editor.getValue().trim();
-        if (existing && existing !== snippet.trim() && !hasAskedOverwrite) {
+        const existing = editor.getValue();
+        if (existing && existing !== snippet) {
           const ok = confirm("There is already code in the editor. Overwrite?");
-          hasAskedOverwrite = true;
           if (!ok) return;
         }
         editor.setValue(snippet, -1);
@@ -131,10 +129,9 @@
     if (fallbackContainer) {
       const textInput = fallbackContainer.querySelector(".ace_text-input");
       if (textInput) {
-        const existingVal = textInput.value.trim();
-        if (existingVal && existingVal !== snippet.trim() && !hasAskedOverwrite) {
+        const existingVal = textInput.value;
+        if (existingVal && existingVal !== snippet) {
           const ok = confirm("There is already code in the editor. Overwrite?");
-          hasAskedOverwrite = true;
           if (!ok) return;
         }
         textInput.value = snippet;
@@ -156,87 +153,18 @@
   }
   
   // Advanced Edit Mode:
-  // Enable Ace editor editing and remove any restrictions on text selection and copying.
-  // Instead of injecting inline script, we now create a blob URL for the script and load it as an external file.
+  // Instead of injecting inline script (which violates CSP), load an external script file.
   function enableEditMode() {
     if (!hasAceEditor()) return;
     try {
-      const scriptContent = `(function() {
-          try {
-            // Ace editor modifications
-            const editorEl = document.querySelector('.ace_editor');
-            const aceEditor = ace.edit(editorEl.id || "ace-editor");
-            aceEditor.setReadOnly(false);
-            aceEditor.setOptions({
-              readOnly: false,
-              highlightActiveLine: true,
-              highlightSelectedWord: true,
-              copyWithEmptySelection: true
-            });
-            aceEditor.commands.removeCommands(['cut', 'copy', 'paste']);
-            
-            // Clear inline event handlers on document and all elements
-            document.oncopy = document.oncut = document.onpaste = document.oncontextmenu = document.onselectstart = null;
-            document.querySelectorAll('*').forEach(el => {
-              el.oncopy = el.oncut = el.onpaste = el.oncontextmenu = el.onselectstart = null;
-            });
-            
-            // Inject CSS to force text selection
-            let styleEl = document.getElementById('enable-edit-mode-style');
-            if (!styleEl) {
-              styleEl = document.createElement('style');
-              styleEl.id = 'enable-edit-mode-style';
-              styleEl.innerHTML = \`
-                * {
-                  -webkit-user-select: text !important;
-                  -moz-user-select: text !important;
-                  -ms-user-select: text !important;
-                  user-select: text !important;
-                }
-              \`;
-              document.head.appendChild(styleEl);
-            }
-            
-            // Add capturing listeners to override any blocking on key events
-            const overrideEvents = ['copy', 'cut', 'paste', 'contextmenu', 'selectstart', 'dragstart'];
-            overrideEvents.forEach(ev => {
-              document.addEventListener(ev, function(e) {
-                e.stopPropagation();
-              }, true);
-            });
-            
-            // Override addEventListener to ignore adding handlers for blocked events
-            (function() {
-              const originalAddEventListener = EventTarget.prototype.addEventListener;
-              EventTarget.prototype.addEventListener = function(type, listener, options) {
-                const blockedEvents = ['copy', 'cut', 'paste', 'contextmenu', 'selectstart', 'dragstart'];
-                if (blockedEvents.includes(type)) {
-                  return;
-                }
-                return originalAddEventListener.call(this, type, listener, options);
-              };
-            })();
-            
-            // Expose a function to paste code into the editor
-            window.elabxcsPaste = function(text) {
-              aceEditor.setValue(text, -1);
-              return true;
-            };
-            console.log("Advanced Edit mode enabled: text selection and copy restored.");
-          } catch (error) {
-            console.error("Error enabling advanced edit mode:", error);
-          }
-        })();`;
-      const blob = new Blob([scriptContent], { type: 'text/javascript' });
-      const scriptUrl = URL.createObjectURL(blob);
+      const scriptUrl = chrome.runtime.getURL('advancedEditMode.js');
       const scriptEl = document.createElement('script');
       scriptEl.src = scriptUrl;
       scriptEl.onload = function() {
-         URL.revokeObjectURL(scriptUrl);
-         scriptEl.remove();
+        scriptEl.remove();
+        console.log("Advanced edit mode script injected via external file.");
       };
       document.head.appendChild(scriptEl);
-      console.log("Advanced edit mode script injected.");
     } catch (error) {
       console.error("Error in enableEditMode:", error);
     }
