@@ -168,9 +168,41 @@ document.addEventListener('DOMContentLoaded', function() {
   // Listen for messages from content script
   chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.action === 'foundSolution') {
-      textInput.value = message.solution;
+      // Process the solution to preserve actual line breaks,
+      // but escape newline characters inside string literals.
+      let code = message.solution;
+      let fixedCode = "";
+      let inString = false;
+      let escape = false;
+      for (let i = 0; i < code.length; i++) {
+        let c = code[i];
+        if (inString) {
+          if (escape) {
+            fixedCode += c;
+            escape = false;
+          } else {
+            if (c === '\\') {
+              fixedCode += c;
+              escape = true;
+            } else if (c === '"') {
+              fixedCode += c;
+              inString = false;
+            } else if (c === '\n') {
+              fixedCode += "\\n";
+            } else {
+              fixedCode += c;
+            }
+          }
+        } else {
+          if (c === '"') {
+            inString = true;
+          }
+          fixedCode += c;
+        }
+      }
+      textInput.value = fixedCode;
       // Save the solution for future use
-      chrome.storage.local.set({ lastText: message.solution });
+      chrome.storage.local.set({ lastText: fixedCode });
       // Show a notification
       showNotification('Solution found!', 'A matching solution has been loaded.');
     }
@@ -197,4 +229,4 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 500);
     }, 3000);
   }
-}); 
+});

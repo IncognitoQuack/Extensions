@@ -67,7 +67,14 @@
       "Problem Description:",
       "Problem:",
       "Description:",
-      "Challenge:"
+      "Challenge:",
+      "Question description",
+      "Question:",
+      "Question description:",
+      "**Question description**",
+      "**Question description**:",
+      "**Question description:**",
+      "**Question description :**"
     ];
     for (const marker of markers) {
       const idx = pageText.indexOf(marker);
