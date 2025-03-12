@@ -7,10 +7,19 @@ document.addEventListener('DOMContentLoaded', function() {
   const activationInput = document.getElementById('activationInput');
   const activateBtn = document.getElementById('activateBtn');
 
-  extractBtn.disabled = true;
-  editToggle.disabled = true;
+  function updateExtractBtnTitle() {
+    if (extractBtn.disabled) {
+      extractBtn.title = "Enter activation code to enable this feature.";
+    } else {
+      extractBtn.removeAttribute("title");
+    }
+  }
 
-  //constants activation
+  extractBtn.disabled = true;
+  updateExtractBtnTitle();
+  // editToggle.disabled = true;
+
+  // Constants activation
   const encryptionKey = '2L3d!#@$F@Fq$DFgdGW';
   const encryptedCode = 'U2FsdGVkX18aMXPfCX0WJZRi1zA+liBDvpVjrmJ0CPQ=';
 
@@ -25,16 +34,17 @@ document.addEventListener('DOMContentLoaded', function() {
       return null;
     }
   }
-  
+
   // Check if activation has been done previously; if so, enable features and hide activation section
   chrome.storage.local.get(['activationDone'], function(result) {
     if (result.activationDone) {
       extractBtn.disabled = false;
+      updateExtractBtnTitle();
       editToggle.disabled = false;
       document.querySelector('.activation-section').style.display = 'none';
     }
   });
-  
+
   // Handle activation button click
   activateBtn.addEventListener('click', function() {
     const userCode = activationInput.value.trim();
@@ -42,7 +52,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (userCode === actualCode) {
       // Activation successful: enable blocked elements
       extractBtn.disabled = false;
-      editToggle.disabled = false;
+      editToggle.disabled = false; // Enable editToggle after successful activation
+      updateExtractBtnTitle(); // Update title on success
       showNotification('Activation Successful', 'Features unlocked.');
       // Hide the activation section and save activation state
       document.querySelector('.activation-section').style.display = 'none';
@@ -51,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
       showNotification('Activation Failed', 'Incorrect activation code.');
     }
   });
-  
+
   // Function to update visibility of the custom snippet section based on Edit Mode
   function updateCustomSnippetVisibility() {
     if (editToggle.checked) {
@@ -60,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
       customSnippetSection.style.display = 'none';
     }
   }
-  
+
   // Load saved state
   chrome.storage.local.get(['editModeEnabled', 'lastText'], function(result) {
     if (result.editModeEnabled !== undefined) {
@@ -71,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     updateCustomSnippetVisibility();
   });
-  
+
   // Handle paste button click
   pasteBtn.addEventListener('click', function() {
     const text = textInput.value;
@@ -85,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
-  
+
   // Handle edit mode toggle
   editToggle.addEventListener('change', function() {
     const isEnabled = editToggle.checked;
@@ -100,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     updateCustomSnippetVisibility();
   });
-  
+
   // Handle extract button click (for problem extraction)
   extractBtn.addEventListener('click', function() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
@@ -109,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
-  
+
   // New: Handle custom snippet extraction button click
   const extractSnippetBtn = document.getElementById('extractSnippetBtn');
   extractSnippetBtn.addEventListener('click', function() {
@@ -123,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
-  
+
   const contributeBtn = document.getElementById('contributeBtn');
   if (contributeBtn) {
     contributeBtn.addEventListener('click', function() {
@@ -153,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
-  
+
   // Listen for messages from content script
   chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.action === 'foundSolution') {
@@ -168,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
       customSnippetOutput.value = message.snippet;
     }
   });
-  
+
   // Function to show notification
   function showNotification(title, message) {
     const notification = document.createElement('div');
@@ -186,4 +197,4 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 500);
     }, 3000);
   }
-});
+}); 
