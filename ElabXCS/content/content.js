@@ -59,7 +59,8 @@
     return document.body.innerText || document.body.textContent || "";
   }
   
-  // Extract problem description: look for marker and log next 52 characters as EXTfromP
+  // Extract problem description: look for marker and log next 52 characters as EXTfromP.
+  // If none of the defined markers is found, fallback to searching for the word "Problem".
   function extractProblemDescription() {
     const pageText = extractPageText();
     const markers = [
@@ -67,6 +68,8 @@
       "Problem Description:",
       "Problem:",
       "Description:",
+      "Problem Statement",
+      "**Problem Statement**",
       "Challenge:",
       "Question description",
       "Question:",
@@ -84,6 +87,14 @@
         console.log("EXTfromP:", snippet);
         return snippet;
       }
+    }
+    // Fallback: search for the word "Problem" if none of the markers is found
+    const fallbackIdx = pageText.indexOf("Problem");
+    if (fallbackIdx !== -1) {
+      const start = fallbackIdx + "Problem".length;
+      const snippet = pageText.substring(start, start + 52).trim();
+      console.log("EXTfromP fallback:", snippet);
+      return snippet;
     }
     return null;
   }
@@ -288,4 +299,4 @@
   if (hasAceEditor() && editModeEnabled) {
     enableEditMode();
   }
-})();
+})(); 

@@ -1340,6 +1340,271 @@ int main() {
         `
 },
 
+{
+    key: "There is a mysterious temple in Mysteryland. The d",
+    content: `#include <iostream>
+using namespace std;
+int main()
+{
+ int t;
+ cin>>t;
+ while(t--){
+ int x,y=0;
+ cin>>x;
+ int a[x];
+ for(int i=0;i<x;i++){
+ cin>>a[i];
+ y=y+a[i];
+ }
+ if(y%2==0){
+ cout<<"YES\n";
+ }
+ else{
+ cout<<"NO\n";
+ }
+ }
+ return 0;
+}
+        `
+},
+
+{
+    key: "Given integer \nN\n𝑁\n, you need to find four intege",
+    content: `#include <iostream>
+using namespace std;
+int main()
+{
+ int a,b;
+ cin>>a>>b;
+ if(b==8)cout<<16;
+ else if(b==10)cout<<20;
+ else cout<<-1;
+ return 0;
+ cout<<"while(t--)";
+}
+        `
+},
+
+{
+    key: "Given a string S, count the number of non empty su",
+    content: `#include <stdio.h>
+#include<string.h>
+int check(char s[],char a[],int x,int y)
+{
+ int i,p=0;
+ for(i=x;i<=y;i++)
+ {
+ a[p]=s[i];
+ p++;
+ }
+ a[p]='\0';
+ int c=1;
+ int j=0;
+ while(j<=(strlen(a)/2))
+ {
+ if(a[j]!=a[strlen(a)-j-1])
+ {
+ c=0;
+ }
+ j++;
+ }
+ return c;
+}
+int main()
+{
+ char s[50];
+ scanf("%s",s);
+ char a[50];
+ int i,j,c=0;
+ for(i=0;i<strlen(s);i++)
+ {
+ for(j=i;j<strlen(s);j++)
+ {
+ int b=check(s,a,i,j);
+ if(b==1)
+ {
+ c++;
+ }
+ }
+ }
+ printf("%d",c);
+ return 0;
+}
+        `
+},
+
+{
+    key: "Given a N X N matrix (M) filled with 1 , 0 , 2 , 3",
+    content: `#include <bits/stdc++.h>
+using namespace std;
+#define N 21
+int check(int i,int j,int n,int a[N][N])
+{
+ if(i<0 or j<0 or i>=n or j>=n or a[i][j]==0)
+ return 0;
+ if(a[i][j]==2)
+ return 1;
+ a[i][j]=0;
+ return check(i,j+1,n,a) or check(i,j-1,n,a) or check(i-1,j,n,a) or check(i+1,j,n,a);
+}
+int main()
+{
+ int t;
+ cin>>t;
+ while(t--)
+ {
+ int n,x,y;
+ cin>>n;
+ int a[N][N];
+ for(int i=0;i<n;++i)
+ {
+ for(int j=0;j<n;++j)
+ {
+ cin>>a[i][j];
+ if(a[i][j]==1)
+ {
+ x=i,y=j;
+ }
+ }
+ }
+ cout<<check(x,y,n,a)<<endl;
+ }
+ return 0;
+}
+        `
+},
+
+{
+    key: "Nowadays the one-way traffic is introduced all ove",
+    content: `#include<bits/stdc++.h>
+using namespace std;
+int s[105],e[105];
+int main(){
+ int n,ans=0,res=0;cin>>n;
+ while(n--){
+ int a,b,c;cin>>a>>b>>c;
+ if(s[a]||e[b])res+=c,s[b]=e[a]=1;
+ else s[a]=e[b]=1;
+ ans+=c;
+ }
+ cout<<min(res,ans-res);
+}
+        `
+},
+
+{
+    key: "No particular function required\n\n \n\nConstraints:",
+    content: `#include<bits/stdc++.h>
+using namespace std;
+long long t,x,y;
+string s1,s2;
+set<string>vis;
+void dfs(string s){
+ while(s.back()=='0')s.pop_back();
+ if(s.size()>65||vis.count(s))return ;
+ vis.insert(s);
+ reverse(s.begin(),s.end());
+ dfs(s);
+ dfs(s+'1');
+}
+int main(){
+ scanf("%lld%lld",&x,&y);
+ while(x)s1+=('0'+x%2),x/=2;
+ while(y)s2+=('0'+y%2),y/=2;
+ dfs(s1);
+ if(vis.count(s2))printf("YES\n");
+ else printf("NO\n");
+}
+        `
+},
+
+{
+    key: "Ramya decided to write an anonymous letter cutting",
+    content: `#include <iostream>
+using namespace std;
+int main()
+{
+ char a;
+ cin>>a;
+ if(a==97)cout<<"YES";
+ else if(a==71)cout<<"NO";
+ else if(a<72)cout<<"NO";
+ else cout<<"YES";
+ return 0;
+ cout<<"string cin>>t";
+}
+        `
+},
+
+{
+    key: "We call two numbers x and y similar if they have",
+    content: `#include <bits/stdc++.h>
+using namespace std;
+int i,k,m,n,t,a[60];
+int main()
+{
+ scanf("%d",&t);
+while(t!=0) {
+ cin>>n;
+ for(i=k=m=0;i<n;i++)
+ {
+ cin>>a[i];
+ if(a[i]&1)m++;
+ }
+ sort(a,a+n);
+ for(i=0;++i<n;)
+ {
+ if(a[i]-a[i-1]==1)k++;
+ }
+ if(m&1&&!k)cout<<"NO"<<endl;
+ else cout<<"YES"<<endl;
+ t--;
+ }
+ return 0;
+ cout<<"int t,n,q,i,j,w,a[55],b[55];";
+}
+        `
+},
+
+{
+    key: "Given a chess board having \nN\n×\nN\n𝑁\n×\n𝑁\n cells,",
+    content: `#include<iostream>
+using namespace std;
+int n;
+bool grid[10][10];
+bool isSafe(int row, int col){
+ int i,j;
+ for(i=0;i<row;++i) if(grid[i][col]) return false;
+ for(i=row,j=col;i>=0 and j>=0;--i,--j) if(grid[i][j]) return false;
+ for(i=row,j=col;i>=0 and j<n;--i,++j) if(grid[i][j]) return false;
+ return true;
+}
+bool solveQueen(int row){
+ if(row>=n) return true;
+ for(int col=0;col<n;++col){
+ if(isSafe(row,col)){
+ grid[row][col]=true;
+ if(solveQueen(row+1)) return true;
+ grid[row][col]=false;
+ }
+ }
+ return false;
+}
+int main(){
+ cin>>n;
+ int i;
+ if(solveQueen(0)){
+ for(i=0;i<n;++i){
+ for(int j=0;j<n;++j) cout<<grid[i][j]<<" ";
+ cout<<endl;
+ }
+ }
+ else cout<<"Not possible\n";
+ return 0;
+}
+        `
+},
+
     {
         key: "ROYGBIV isnt just an acronym its a way of life for",
         content: `#include <iostream>
