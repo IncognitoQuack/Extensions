@@ -10,8 +10,12 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateExtractBtnTitle() {
     if (extractBtn.disabled) {
       extractBtn.title = "Enter activation code to enable this feature.";
+      extractBtn.style.cursor = "not-allowed";
+      extractBtn.style.opacity = "0.69";
     } else {
       extractBtn.removeAttribute("title");
+      extractBtn.style.cursor = "";
+      extractBtn.style.opacity = "";
     }
   }
 
@@ -21,7 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Constants activation
   const encryptionKey = '2L3d!#@$F@Fq$DFgdGW';
-  const encryptedCode = 'U2FsdGVkX18aMXPfCX0WJZRi1zA+liBDvpVjrmJ0CPQ=';
+  // Persistent activation (long-term)
+  const persistentEncryptedCode = 'U2FsdGVkX18aMXPfCX0WJZRi1zA+liBDvpVjrmJ0CPQ=';
+  // Session activation (temporary)
+  const sessionEncryptedCode = 'U2FsdGVkX1+pl3IYcZS5yIDZt5H8WWkpUYZuCBLNXqU=';
 
   // Function to decrypt activation code using CryptoJS
   function decryptActivationCode(encrypted, key) {
@@ -35,29 +42,43 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Check if activation has been done previously; if so, enable features and hide activation section
+  // Function to enable features (called after successful activation)
+  function enableFeatures() {
+    extractBtn.disabled = false;
+    updateExtractBtnTitle();
+    editToggle.disabled = false;
+    document.querySelector('.activation-section').style.display = 'none';
+  }
+
+  // Check if activation has been done previously; first check local then session storage
   chrome.storage.local.get(['activationDone'], function(result) {
     if (result.activationDone) {
-      extractBtn.disabled = false;
-      updateExtractBtnTitle();
-      editToggle.disabled = false;
-      document.querySelector('.activation-section').style.display = 'none';
+      enableFeatures();
+    } else {
+      chrome.storage.session.get(['activationDone'], function(result) {
+        if (result.activationDone) {
+          enableFeatures();
+        }
+      });
     }
   });
 
   // Handle activation button click
   activateBtn.addEventListener('click', function() {
     const userCode = activationInput.value.trim();
-    const actualCode = decryptActivationCode(encryptedCode, encryptionKey);
-    if (userCode === actualCode) {
-      // Activation successful: enable blocked elements
-      extractBtn.disabled = false;
-      editToggle.disabled = false; // Enable editToggle after successful activation
-      updateExtractBtnTitle(); // Update title on success
-      showNotification('Activation Successful', 'Features unlocked.');
-      // Hide the activation section and save activation state
-      document.querySelector('.activation-section').style.display = 'none';
+    const persistentCode = decryptActivationCode(persistentEncryptedCode, encryptionKey);
+    const sessionCode = decryptActivationCode(sessionEncryptedCode, encryptionKey);
+
+    if (userCode === persistentCode) {
+      // Persistent activation: enable features and save in local storage for longer activation.
+      enableFeatures();
+      showNotification('Activation Successful', 'Persistent activation enabled.');
       chrome.storage.local.set({ activationDone: true });
+    } else if (userCode === sessionCode) {
+      // Session activation: enable features and save in session storage so it lasts until Chrome is closed.
+      enableFeatures();
+      showNotification('Activation Successful', 'Session activation enabled.');
+      chrome.storage.session.set({ activationDone: true });
     } else {
       showNotification('Activation Failed', 'Incorrect activation code.');
     }
@@ -204,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // Save the solution for future use
       chrome.storage.local.set({ lastText: fixedCode });
       // Show a notification
-      showNotification('Solution found!', 'A matching solution has been loaded.');
+      showNotification('Solution found!', 'And The answer has been loaded.');
     }
     if (message.action === 'customSnippetExtracted') {
       const customSnippetOutput = document.getElementById('customSnippetOutput');

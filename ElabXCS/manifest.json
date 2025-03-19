@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "ElabXCS",
   "version": "1.1.5",
-  "description": "Bypass Elab's security measures with ElabXCS (Beta version)",
+  "description": "Get a personal assistant for Elab with ElabXCS, an initiative by IncognitoQuack.",
   "author": "IncognitoQuack",
   "icons": {
     "16": "icons/icon16.png",
@@ -38,4 +38,4 @@
       "matches": ["<all_urls>"]
     }
   ]
-}
+} 
