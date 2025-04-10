@@ -6,7 +6,6 @@
 
 - **Bypass Security Measures:** Easily extract code snippets from exam pages.
 - **Solution Extraction:** The extension looks for Problem Description and matches the subsequent text against a database of solutions.
-- **Dynamic Matching:** Uses fuzzy matching to identify the most relevant solution from the database.
 - **Community-Driven:** Contribute more solutions to help enrich the database and support the student community.
 
 ## Installation (Chrome Developer Mode)
