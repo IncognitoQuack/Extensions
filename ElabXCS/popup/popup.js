@@ -72,15 +72,15 @@ document.addEventListener('DOMContentLoaded', function() {
     if (userCode === persistentCode) {
       // Persistent activation: enable features and save in local storage for longer activation.
       enableFeatures();
-      showNotification('Activation Successful', 'Persistent activation enabled.');
+      showNotification('Activation Successful', 'Persistent activation enabled.', 'green');
       chrome.storage.local.set({ activationDone: true });
     } else if (userCode === sessionCode) {
       // Session activation: enable features and save in session storage so it lasts until Chrome is closed.
       enableFeatures();
-      showNotification('Activation Successful', 'Session activation enabled.');
+      showNotification('Activation Successful', 'Session activation enabled.', 'green');
       chrome.storage.session.set({ activationDone: true });
     } else {
-      showNotification('Activation Failed', 'Incorrect activation code.');
+      showNotification('Activation Failed', 'Incorrect activation code.', 'red');
     }
   });
 
@@ -162,11 +162,11 @@ document.addEventListener('DOMContentLoaded', function() {
       chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         chrome.tabs.sendMessage(tabs[0].id, { action: 'contribute' }, function(response) {
           if (!response) {
-            showNotification('Error', 'Could not retrieve contribution data from the page.');
+            showNotification('Error', 'Could not retrieve contribution data from the page.', 'red');
             return;
           }
           if (response.exists) {
-            showNotification('Already Exists', 'This question already exists in the database.');
+            showNotification('Already Exists', 'This question already exists in the database.', 'red');
           } else {
             const extractedKey = response.key;
             const editorContent = response.editorContent;
@@ -176,9 +176,9 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             const contributionText = JSON.stringify(contributionData, null, 2);
             navigator.clipboard.writeText(contributionText).then(function() {
-              showNotification('Contribution Copied', 'Contribution data has been copied to clipboard.');
+              showNotification('Contribution Copied', 'Contribution data has been copied to clipboard.', 'green');
             }).catch(function(err) {
-              showNotification('Error', 'Failed to copy to clipboard.');
+              showNotification('Error', 'Failed to copy to clipboard.', 'red');
             });
           }
         });
@@ -189,6 +189,10 @@ document.addEventListener('DOMContentLoaded', function() {
   // Listen for messages from content script
   chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if (message.action === 'foundSolution') {
+      if (!message.solution) {
+        showNotification('Solution Not Found', 'No matching solution found.', 'red');
+        return;
+      }
       // Process the solution to preserve actual line breaks,
       // but escape newline characters inside string literals.
       let code = message.solution;
@@ -221,11 +225,13 @@ document.addEventListener('DOMContentLoaded', function() {
           fixedCode += c;
         }
       }
+      // Replace any literal null characters (code 0) with the two-character sequence "\0"
+      fixedCode = fixedCode.replace(/\x00/g, '\\0');
       textInput.value = fixedCode;
       // Save the solution for future use
       chrome.storage.local.set({ lastText: fixedCode });
-      // Show a notification
-      showNotification('Solution found!', 'And The answer has been loaded.');
+      // Show a notification for successful solution
+      showNotification('Solution found!', 'And the answer has been loaded.', 'green');
     }
     if (message.action === 'customSnippetExtracted') {
       const customSnippetOutput = document.getElementById('customSnippetOutput');
@@ -233,10 +239,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Function to show notification
-  function showNotification(title, message) {
+  // Function to show notification with customizable color based on type ("green" or "red")
+  function showNotification(title, message, type = 'green') {
     const notification = document.createElement('div');
     notification.className = 'notification';
+    let bgColor;
+    if (type === 'red') {
+      bgColor = '#f87171'; // red tone for errors or negative messages
+    } else {
+      bgColor = '#4ade80'; // green tone for success messages
+    }
+    notification.style.backgroundColor = bgColor;
     notification.innerHTML = `
       <div class="notification-title">${title}</div>
       <div class="notification-message">${message}</div>

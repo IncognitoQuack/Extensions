@@ -1898,6 +1898,563 @@ int main(){
     chu();}`
     },
 
+    // G ji ka account
+    {
+        key: "A sportsman starts from point xstart = 0 and runs",
+        content: `#include <bits/stdc++.h> 
+using namespace std; 
+const int N = 2e5+5; 
+int p[N],par,x[N]; 
+int main(){ 
+    int n,i,m,s,d; 
+    cin>>n>>m>>s>>d; 
+    x[0]=-1; 
+    for(i=1;i<=n;++i) 
+        cin>>x[i]; 
+    sort(x,x+n+1); 
+    par = n; 
+    for(i=n-1;i>=0;--i) 
+        if(x[i+1]-x[i]>=s+2 && x[par]-x[i+1]<=d-2) 
+            p[i]= par,par = i; 
+    if(par>0){ 
+        printf("IMPOSSIBLE\n"); 
+    } 
+    else{ 
+        for(i=0;i<n;i= p[i]) 
+            printf("RUN %d\nJUMP %d\n",x[i+1]-x[i]-2,x[p[i]]-x[i+1]+2); 
+        if(x[n]+1<m) 
+            printf("RUN %d\n",m-x[n]-1); 
+    } 
+    return 0; 
+    cout<<"cin>>a[i];"; 
+}`
+    },    
+
+    {
+        key: "A stealing got into a matches warehouse and wants",
+        content: `#include<bits/stdc++.h> 
+using namespace std; 
+#define res cin>>a>>b; cin>>s>>d; 
+int n,m,s,a,b,d[11]; 
+int main(){ 
+cin>>n>>m; 
+while(m--)cin>>a>>b,d[b]+=a; 
+for(int i=10;i>0&&n>0;i--)s+=i*min(n,d[i]),n-=d[i]; 
+cout<<s; 
+}`
+    },  
+    
+    {
+        key: "Nadanan's company employed n people. Now Nadanan n",
+        content: `#include<bits/stdc++.h> 
+using namespace std; 
+#define ans cin>>ans[0];cin>>a>>b>>c; 
+#define f(n) for(int i=0;i<n;i++) 
+void solve(){} 
+int main(){ 
+    int n;cin>>n; 
+    int a[n];f(n) cin>>a[i]; 
+    int M;cin>>M; 
+    map<int,int> m; 
+    while(M--){ 
+        int x,y,c;cin>>x>>y>>c; 
+        if(m.find(y)==m.end()) 
+            m[y]=c; 
+        else if(c<m[y])  
+            m[y]=c; 
+    } 
+    if((int)m.size()==n-1){ 
+        long long int sum=0; 
+        for(auto j : m){ 
+            sum+=j.second; 
+        } 
+        cout<<sum; 
+    } 
+    else cout<<-1; 
+}`
+    },     
+
+    {
+        key: "It's a very unfortunate day for Lavanya today. He",
+        content: `#include <bits/stdc++.h> 
+using namespace std; 
+#define res cin>>a[i],num+=a[i]; 
+#define f1     for(int i=1;i<=n;i++) 
+double n,v,a[25],b[25],sum,mx=1e9; 
+int main(){ 
+    cin>>n>>v; 
+    f1{ 
+        cin>>a[i]; 
+        sum+=a[i]; 
+    } 
+    for(int i=1;i<=n;i++) 
+        cin>>b[i]; 
+    for(int i=1;i<=n;i++) 
+        mx=min(mx,b[i]/a[i]);  
+    cout << fixed<<setprecision(1)<<min(mx*sum,v); 
+    return 0; 
+}`
+    }, 
+    
+    {
+        key: "Banana leaf platter is a traditional method of ser",
+        content: `#include <bits/stdc++.h> 
+using namespace std; 
+#define ll long long 
+#define ar array 
+void dummy(){} 
+int n, k, p, a[50][30]; 
+int dp[51][1501]; 
+void solve() { 
+cin >> n >> k >> p; 
+memset(dp, 0xc0, sizeof(dp)); 
+dp[0][0]=0; 
+for(int i=0; i<n; ++i) { 
+memcpy(dp[i+1], dp[i], sizeof(dp[0])); 
+for(int j=0, s=0; j<k; ++j) { 
+cin >> a[i][j]; 
+s+=a[i][j]; 
+//use j+1 plates 
+for(int l=0; l+j+1<=p; ++l) 
+dp[i+1][l+j+1]=max(dp[i][l]+s, dp[i+1][l+j+1]); 
+} 
+} 
+cout << dp[n][p] << "\n"; 
+} 
+int main() { 
+int n, i; 
+cin >> n; 
+for(i=0;i<n;i++) { 
+solve(); 
+} 
+return 0; 
+cout<<"int max(int a,int b) for(int i = 0;i < n;i++) "; 
+}`
+    }, 
+    
+    {
+        key: "Good news! Shankar get to go to Belgium on a class",
+        content: `#include<iostream> 
+using namespace std; 
+int main() 
+{ 
+    int items; 
+    int a,i,cnt=0; 
+    cin>>a>>items; 
+    int c[items]; 
+    string s[items]; 
+    for(i=0;i<items;i++){ 
+        cin>>s[i]>>c[i]; 
+        if(c[i]<a){ 
+            cout<<"I can afford "<<s[i]<<endl; 
+            a=a-c[i]; 
+        } 
+        else{ 
+            cnt++; 
+        cout<<"I can't afford "<<s[i]<<endl; 
+        } 
+        //cout<<cnt; 
+    } 
+    if(cnt==items) 
+    cout<<"I need more Euro!"; 
+    else 
+    cout<<a; 
+    return 0; 
+    cout<<"char name[MAX][LEN];int price[MAX] afford[MAX]"; 
+}`
+    }, 
+    
+    {
+        key: "Pakshi Rajan is a birds lover, so he spends some fr",
+        content: `#include <iostream> 
+#include <algorithm> 
+using namespace std; 
+int main() 
+{ 
+    int t; 
+    cin>>t; 
+    while(t--){ 
+        int n; 
+        cin>>n; 
+        int arr[n]; 
+        for(int i=0;i<n;i++){ 
+            cin>>arr[i]; 
+        } 
+        sort(arr,arr+n); 
+        int l=1,sum=0; 
+        for(int i=1;i<n;i++){ 
+            if(arr[i]!=arr[i-1]){ 
+                l++; 
+                sum+=l; 
+            } 
+            else sum+=l; 
+        } 
+        cout<<sum+1<<endl; 
+    } 
+    return 0; 
+    cout<<"int s[MAXN]; void sol() read(s[i])"; 
+}`
+    }, 
+    
+    {
+        key: "N teams participate in an IPL tournament in Chenna",
+        content: `#include <iostream> 
+using namespace std; 
+void a(){} 
+int main() 
+{ 
+int n; 
+cin>>n; 
+int a[n],x=0; 
+for(int i=0;i<n;i++){ 
+      cin>>a[i]; 
+ for(int j =i;j>=0;j--) 
+        { 
+            if(a[i]>a[j]) x+=a[i]-a[j]; 
+            else x+=a[j]-a[i]; 
+ 
+        } 
+    } 
+    cout<<x; 
+    return 0; 
+}`
+    }, 
+    
+    {
+        key: "Kadamban has planned a motorbike tour through the W",
+        content: `#include<iostream> 
+using namespace std; 
+int main() 
+{ 
+int t,T; 
+cin>>T; 
+for(t=0;t<T;t++){ 
+    int n,i,count=0; 
+    cin>>n; 
+    int a[n]; 
+    for(i=0;i<n;i++){ 
+        cin>>a[i]; 
+    } 
+    for(i=1;i<n-1;i++){ 
+        if((a[i]>a[i-1])&&(a[i]>a[i+1])) 
+        { 
+            count++; 
+        } 
+    } 
+    cout<<count<<endl; 
+ 
+} 
+    return 0; 
+}`
+    }, 
+    
+    {
+        key: "Problem statement\n\nLucky numbers are defined as t",
+        content: `#include<bits/stdc++.h> 
+using namespace std; 
+  
+string solve(string& s) 
+{ 
+    int n = s.size(), i = 0; 
+    while(i < n && (s[i] == '3' || s[i] == '5')) 
+    ++i; 
+    if(i < n && (s[i] < '5')) 
+    { 
+        if(s[i] == '4') 
+            s[i] = '5'; 
+        else 
+            s[i]='3'; 
+        ++i; 
+        while(i<n) 
+        { 
+            s[i] = '3'; 
+            ++i; 
+        } 
+    } 
+    else 
+    { 
+        while(i >= 0 && (s[i] != '3')) 
+         --i; 
+        if(i < 0) 
+            return string(n + 1, '3'); 
+        s[i] = '5'; 
+        ++i; 
+        while(i < n) 
+        { 
+            s[i] = '3'; 
+            ++i; 
+        } 
+    } 
+    return s; 
+} 
+  
+int main() 
+{ 
+ ios_base::sync_with_stdio(false); cin.tie(NULL); cout.tie(NULL); 
+    int t;  
+ cin >> t;  
+ while(t--) 
+    { 
+     string s; 
+     cin >> s; 
+     cout << solve(s) << endl; 
+    } 
+}`
+    }, 
+    
+    {
+        key: "Problem statement\n\nFatal Eagle has decided to do",
+        content: `#include <bits/stdc++.h> 
+using namespace std; 
+ 
+long long int dp[213][213]; 
+ 
+long long int options (long long int n, long long int k) { 
+    if (dp[n][k] >=0) 
+        return dp[n][k]; 
+    if (n<k) 
+        return 0; 
+    if (n<2*k) 
+        return 1; 
+    long long int result = 1; 
+    for (long long int i=k; i<n; i++) { 
+        result = result + options(n-i, i); 
+    } 
+    dp[n][k] = result; 
+    return result; 
+} 
+ 
+int main () { 
+    int t; 
+    scanf("%d",&t); 
+    for (int i=0; i<201; i++) { 
+        for (int j=0; j<201; j++) { 
+            dp[i][j] = -1; 
+        } 
+    } 
+    while(t--) { 
+        long long n, k; 
+        scanf("%Ld%Ld",&n,&k); 
+        long long ans = options(n,k); 
+        printf("%Ld\n",ans); 
+    } 
+    return 0; 
+}`
+    }, 
+    
+    {
+        key: "Little X has n distinct integers: p1, p2, ..., pn",
+        content: `#include<bits/stdc++.h> 
+using namespace std; 
+typedef long long ll;  
+const int maxn=1e5+1;  
+queue<int>q; 
+int a,b,num[maxn]; 
+map<ll,ll>A; 
+void aa(){ 
+ 
+} 
+int main(){ 
+    int n; 
+    scanf("%d%d%d",&n,&a,&b); 
+    for(int i=1;i<=n;++i) 
+    scanf("%d",&num[i]),A[num[i]]++; 
+    for(int i=1;i<=n;++i) 
+    if(A[num[i]]>0&&A[a-num[i]]==0) q.push(num[i]); 
+    while(!q.empty()) 
+    { 
+        int t=q.front(); 
+        q.pop(); 
+        if(A[t]>0&&A[a-t]==0&&A[b-t]==0) { 
+            puts("NO");return 0; 
+        }  
+        A[t]--;A[b-t]--; 
+        if(A[b-t]==0&&A[a-b+t]>0) q.push(a-b+t); 
+    } 
+    puts("YES"); 
+    for(int i=1;i<=n;++i) 
+    { 
+        printf("%d ",A[num[i]]>0?0:1); 
+        A[num[i]]--; 
+     }  
+}`
+    }, 
+    
+    {
+        key: "Bragadesh got a job as a system administrator in X",
+        content: `#include<bits/stdc++.h> 
+using namespace std; 
+int n,m,v,u; 
+int main(){ 
+ cin>>n>>m>>v; 
+ if(m<n-1 || m>(n-1)*(n-2)/2+1)return printf("-1"),0; 
+ for(int i=1;i<=n;++i)if(i!=v)printf("%d %d\n",i,v),u=i; 
+ m-=n-1; 
+ if(m)for(int i=1;i<=n;++i)for(int j=i+1;j<=n;++j)if(i!=v && j!=u && i!=u && j!=v){ 
+  printf("%d %d\n",i,j); 
+  m--; 
+  if(!m)return 0; 
+ } 
+}`
+    },
+    
+    {
+        key: "During the break the schoolchildren, boys and gir",
+        content: `#include<iostream> 
+int main(){ 
+    int n,t;  
+    std::cin>>n>>t; 
+    std::string s; 
+    std::cin>>s; 
+    for(int i=0;i<t;i++)  
+    {for(int j=0;j<n;j++) 
+    if(s[j]=='B'&&s[j+1]=='G') 
+    {std::swap(s[j],s[j+1]);j++;}} 
+    std::cout<<s; 
+    return 0; 
+   std::cout<<"int i,k,n; while(k){ char a[n+3];"; 
+ 
+}`
+    }, 
+    
+    {
+        key: "Chef Monocarp has just put n dishes into an oven.",
+        content: `#include <bits/stdc++.h> 
+ using namespace std; 
+ void hi(){} 
+int a[500],f[500],n,t; 
+int main(){ 
+  cin>>t; 
+ while(t--){ 
+   cin>>n; 
+  for(int i=1;i<=n;i++) { cin>>a[i]; f[i]=500000; } 
+  sort(a+1,a+1+n); 
+  for(int i=1;i<=n+n/2;i++) 
+            for(int j=n; j>=1; j--) 
+            f[j]=min(f[j],f[j-1]+abs(a[j]-i)); 
+   cout<<f[n]<<endl; 
+ } 
+ return 0; 
+ cout<<"int dp[225][450]; int t[225]; int t;"; 
+}`
+    }, 
+    
+    {
+        key: "You are given a bracket sequence s of length n, w",
+        content: `#include<bits/stdc++.h> 
+using namespace std; 
+int i,k,m,n,t; 
+string s; 
+void asad(){ 
+    int t; 
+    cout<<"int n; char s[109];"; 
+    scanf("%d", &t); 
+ 
+} 
+int main() 
+{ 
+    for(cin>>t;t--;) 
+    { 
+        cin>>n>>s; 
+        for(i=k=m=0;i<n;i++) 
+        { 
+            if(s[i]&1)m=min(m,--k); 
+            else k++; 
+        } 
+cout<<-m<<endl; 
+} 
+return 0; 
+}`
+    }, 
+    
+    {
+        key: "Sometimes it is hard to prepare tests for programm",
+        content: `#include <bits/stdc++.h> 
+#define LL long long 
+using namespace std; 
+void asd(){ 
+cout<<"cin>>s[1]>>s[2]>>s[3]; string ss"; 
+} 
+string pi(string x,string y){ 
+string s=y+"#"+x; 
+vector<int>pi(s.length()); 
+for(unsigned int i=1,j=0;i<s.length();i++){ 
+while(j&&s[i]!=s[j])j=pi[j-1]; 
+if(s[i]==s[j])j++; 
+pi[i]=j; 
+if(j==(unsigned)y.size())return x; 
+} 
+return x.substr(0,x.size()-pi.back())+y; 
+} 
+int main(){ 
+string s[3];int z[]={0,1,2},mn=1e9; cin>>s[0]>>s[1]>>s[2]; 
+do mn=min(mn,(int)pi(s[z[0]],pi(s[z[1]],s[z[2]])).size());while(next_permutation(z,z+3)); 
+cout<<mn; 
+return 0; 
+}`
+    },
+    
+    {
+        key: "Vasya has recently learned to type and log on to",
+        content: `#include<bits/stdc++.h> 
+using namespace std; 
+char c,a[7]="hello "; 
+int i; 
+int main(){ 
+while(cin>>c) 
+ if(c==a[i]) i++; 
+if(i==5) cout<<"YES"; else cout<<"NO"; 
+return 0; 
+cout<<"int n=strlen(s); #include<string.h> char s[101];"; 
+}`
+    }, 
+    
+    {
+        key: "Mano went shopping and bought items worth X dollor",
+        content: `#include<iostream> 
+#include<math.h> 
+using namespace std; 
+void for_(){ 
+ 
+} 
+int main() 
+{ 
+    int t; 
+    cin>>t; 
+    while(t--){ 
+       int n; 
+        cin>>n; 
+        cout<<100-n<<endl; 
+    } 
+ 
+    return 0; 
+}`
+    }, 
+    
+    {
+        key: "Ajith Kumar wants to reach Lord Murugan Temple as",
+        content: `#include<iostream> 
+using namespace std; 
+void for_(){ 
+ 
+} 
+int main() 
+{ 
+    int t; 
+    cin>>t; 
+    while(t--){ 
+        int x,y; 
+        cin>>x>>y; 
+        if(x<y) 
+        cout<<"Royal Enfield"<<endl; 
+        else if(x==y) cout<<"SAME"<<endl; 
+        else cout<<"Audi"<<endl; 
+    } 
+ 
+    return 0; 
+}`
+    },     
+
 
     // this code below only clears 87% test case but is the best possible solution. Semi-working:1
     {
@@ -1927,8 +2484,9 @@ int main(){
 ];
 
 // current answer base- working (contriubted by me)- 60
+// current answer base- working (from G ji account)- 20 
 // current answer base- semi-working (contriubted by me)- 1 --> (87%, Semi-working:1)
 
-//total key data- 61
+//total key data- 81
 
 export default qnaDatabase;

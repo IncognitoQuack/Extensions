@@ -109,7 +109,7 @@
       const normKey = normalizeText(entry.key);
       const sim = stringSimilarity(normExtracted, normKey);
       console.log(`Comparing: "${normExtracted}" with "${normKey}" -> similarity: ${sim.toFixed(2)}%`);
-      if (sim > bestSim && sim >= 53) {
+      if (sim > bestSim && sim >= 83) {
         bestSim = sim;
         bestMatch = entry.content;
       }
