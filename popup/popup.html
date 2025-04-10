@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="popup.css">
+  <title>ElabXCS</title>
+  <script src="crypto-js.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>ElabXCS</h1>
+      <!-- <p title="Under devlopment">Beta version</p> -->
+    </div>
+    
+    <div class="activation-section">
+      <input type="password" id="activationInput" placeholder="Enter activation code">
+      <button id="activateBtn">Activate</button>
+    </div>
+    
+    <div class="content">
+      <div class="input-group">
+        <textarea id="textInput" placeholder="Enter code to paste into the editor..."></textarea>
+      </div>
+      
+      <div class="actions">
+        <button id="pasteBtn">Paste Code</button>
+        <button id="extractBtn" class="secondary-btn">Find Solution &nbsp;🧠</button> 
+      </div>
+      
+      <div class="toggle-container">
+        <label for="editToggle" class="toggle-label">
+          <span>Edit Mode</span>
+          <div class="toggle-switch">
+            <input type="checkbox" id="editToggle">
+            <span class="slider"></span>
+          </div>
+        </label>
+        <!-- <p class="helper-text">Enable editing features</p> -->
+      </div>
+      <br>
+      <hr>
+      <br>
+      
+      <!-- hidden by default -->
+      <div class="custom-snippet" id="customSnippetSection" style="display: none;">
+        <h3>Extract Custom Snippet</h3>
+        <div class="input-group">
+          <input type="text" id="initialPhraseInput" placeholder="Enter initial phrase">
+        </div>
+        <div class="input-group">
+          <input type="number" id="numCharsInput" placeholder="Number of characters">
+        </div>
+        <div class="actions">
+          <button id="extractSnippetBtn">Extract Snippet</button>
+        </div>
+        <div class="input-group">
+          <textarea id="customSnippetOutput" placeholder="Extracted snippet will appear here..." readonly></textarea>
+        </div>
+      </div>
+      <!-- End new section -->
+      
+      <!-- New: Contribute Button -->
+      <div class="actions">
+        <button id="contributeBtn" class="secondary-btn" title="Please refer to the Contribute.md in the repo for more information.">Contribute &nbsp;🤝</button>
+      </div>
+      
+    </div>
+    
+    <div class="footer">
+      <p title="We developed this tool to assist you with Elab. While the current answer database is limited, your contributions can help improve it.">
+        ~ <b>Cheetah</b> <b>Sher</b>
+      </p>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
