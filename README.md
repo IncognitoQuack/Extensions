@@ -34,4 +34,8 @@ We believe in the power of community—if you have solutions to add or improveme
 
 ## Disclaimer
 
-This tool is provided for educational purposes only. The developer is **not responsible for any misuse or consequences arising from its use**. Use at **your own risk** only.
+This tool is provided for educational purposes only. The developer is **not responsible for any misuse or consequences arising from its use**. Use at **your own risk** only. , and please ensure **compliance** with your **institution's policie**s and applicable laws. 😏
+
+## Note
+
+Ich habe die harte Arbeit gemacht, du drückst nur den Knopf - das Leben ist gut für dich! жесть
