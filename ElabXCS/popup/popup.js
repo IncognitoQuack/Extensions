@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const customSnippetSection = document.getElementById('customSnippetSection'); 
   const activationInput = document.getElementById('activationInput');
   const activateBtn = document.getElementById('activateBtn');
+  const themeEl = document.getElementById('theme'); // This element will be used for admin to toggle dark mode
 
   function updateExtractBtnTitle() {
     if (extractBtn.disabled) {
@@ -25,9 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Constants activation
   const encryptionKey = '2L3d!#@$F@Fq$DFgdGW';
-  // Persistent activation (long-term)
+  // admin 
   const persistentEncryptedCode = 'U2FsdGVkX18aMXPfCX0WJZRi1zA+liBDvpVjrmJ0CPQ=';
-  // Session activation (temporary)
+  // user 
   const sessionEncryptedCode = 'U2FsdGVkX1+pl3IYcZS5yIDZt5H8WWkpUYZuCBLNXqU=';
 
   // Function to decrypt activation code using CryptoJS
@@ -50,16 +51,24 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.activation-section').style.display = 'none';
   }
 
-  // Check if activation has been done previously; first check local then session storage
-  chrome.storage.local.get(['activationDone'], function(result) {
+  // Function to set up admin features (like dark mode toggle)
+  function setupAdminFeatures() {
+    if (themeEl) {
+      themeEl.style.cursor = 'pointer'; // make clickable
+      themeEl.addEventListener('click', function() {
+        // Toggle dark mode by adding or removing the "dark-mode" class on the body element
+        document.body.classList.toggle('dark-mode');
+      });
+    }
+  }
+
+  // Check if activation has been done previously via session storage (only session storage is used now)
+  chrome.storage.session.get(['activationDone', 'admin'], function(result) {
     if (result.activationDone) {
       enableFeatures();
-    } else {
-      chrome.storage.session.get(['activationDone'], function(result) {
-        if (result.activationDone) {
-          enableFeatures();
-        }
-      });
+      if (result.admin) {
+        setupAdminFeatures();
+      }
     }
   });
 
@@ -70,15 +79,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const sessionCode = decryptActivationCode(sessionEncryptedCode, encryptionKey);
 
     if (userCode === persistentCode) {
-      // Persistent activation: enable features and save in local storage for longer activation.
+      // Admin activation: even though admin activation is treated as session activation, mark admin privileges.
       enableFeatures();
-      showNotification('Activation Successful', 'Persistent activation enabled.', 'green');
-      chrome.storage.local.set({ activationDone: true });
+      showNotification('Activation Successful', 'Admin privileges enabled.', 'green');
+      chrome.storage.session.set({ activationDone: true, admin: true });
+      setupAdminFeatures();
     } else if (userCode === sessionCode) {
-      // Session activation: enable features and save in session storage so it lasts until Chrome is closed.
+      // Session activation: enable features as a regular user.
       enableFeatures();
       showNotification('Activation Successful', 'Session activation enabled.', 'green');
-      chrome.storage.session.set({ activationDone: true });
+      chrome.storage.session.set({ activationDone: true, admin: false });
     } else {
       showNotification('Activation Failed', 'Incorrect activation code.', 'red');
     }

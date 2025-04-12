@@ -1007,13 +1007,9 @@ int sum[N][N];
 int f[N], g[N];
 
 int main(){
-    cin >> n >> k;
+    cin>>n>>k;
 
-    for (int i = 1; i <= n; i++){
-        for (int j = 1; j <= n; j++){
-            sum[i][j] = sum[i-1][j] + sum[i][j-1] - sum[i-1][j-1] + getint();
-        }
-    }
+    for (int i = 1; i <= n; i++){for (int j = 1; j <= n; j++){sum[i][j] = sum[i-1][j] + sum[i][j-1] - sum[i-1][j-1] + getint();}}
 
     g[n+1] = n;
     for (int kk = 2; kk <= k; kk++){
@@ -1030,8 +1026,7 @@ int main(){
     }
     printf("%d\n", sum[n][n]/2 - f[n]);
     return 0;
-}
-        `
+}`
 },
 
 {
@@ -2455,6 +2450,259 @@ int main()
 }`
     },     
 
+    // Sher ji ka account
+
+    {
+        key: "Major Kathiravan has a chart of distinct projected",
+        content: `#include<bits/stdc++.h>
+#define f(n) for(int i=0;i<n;i++)
+using namespace std;
+int main()
+{
+int n;
+cin>>n;
+int arr[n];
+int res=10000;
+f(n){
+cin>>arr[i];
+}
+f(n){
+for(int j=i+1;j<n;j++){
+if(arr[i]>arr[j]){
+res=min(res,arr[i]-arr[j]);
+}
+}
+}
+cout<<res;
+return 0;
+cout<<"while";
+}`
+    }, 
+    
+    {
+        key: "Surya and Karthi like to pool their cash and go to",
+        content: `#include <iostream>
+using namespace std;
+int main()
+{
+if(0) cout<<"for(i=0;i<l-1;i++)";
+int t;
+cin>>t;
+for(int k=0;k<t;k++){
+int m,l;
+cin>>m;
+cin>>l;
+int cost[l];
+int i;
+for(i=0;i<l;i++){
+cin>>cost[i];
+}
+for(int i=1;i<l;i++){
+if(cost[0]+cost[i]==m){
+cout<<1<<" "<<i+1<<"\n";
+}
+}
+}
+return 0;
+}`
+    }, 
+    
+    {
+        key: "Lakshman and Sukran are the best competitive progr",
+        content: `#include <bits/stdc++.h>
+using namespace std;
+long long n, i = 1, j, k = 9e9, x, s[100001], d;
+int main() {
+cin>>n;
+for (; i <= n; i++){ cin>>x;s[i] = s[i - 1] + x;}
+for (i = 1; i <= n; i++)
+for (j = max(1ll, i - 20000); j <= i; j++)
+if (i != j) k = min(k, (i - j) * (i - j) + (s[i] - s[j]) * (s[i] - s[j]));
+cout << k;
+}`
+    }, 
+    
+    {
+        key: "Samantha has  given an array of N elements, you mu",
+        content: `#include<bits/stdc++.h>
+using namespace std;
+int n,x,p=1;
+int main(){
+vector<int>X;
+for(cin>>n;cin>>x;X.push_back(p=x))if(__gcd(p,x)>1)X.push_back(1);
+cout<<X.size()-n<<endl;
+for(int x:X)cout<<x<<" ";
+return 0;
+cout<<"cin>>y[i];";
+}`
+    }, 
+    
+    {
+        key: "Preethi has given a string S consisting of N symbo",
+        content: `#include<bits/stdc++.h>
+using namespace std;
+int a[1010],s;
+char b;
+int main()
+{
+while(cin>>b)
+a[(int)b]++;
+for(int i=1;i<=300;i++)
+s+=a[i]*a[i];
+cout<<s;
+return 0;
+cout<<"string s; cin>>s;";
+}`
+    }, 
+    
+    {
+        key: "Casimir has a string s which consists of capital",
+        content: `#include<bits/stdc++.h>
+using namespace std;
+int main(){
+int t; cin>>t;
+while (t--){
+string s; cin>>s;
+if(count(s.begin(),s.end(),'B') == s.size() /2.0) cout<<"YES"<<endl;
+else cout<<"NO"<<endl;
+}
+char str[50];
+scanf("%s",str);
+}`
+    },  
+    
+    {
+        key: "Inspector Gadget just installed new springs in his",
+        content: `#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+    string s1,s2,s3,s4,s5,s6;
+    cin>>s1>>s2>>s3>>s4>>s5>>s6;
+    float a,b,c;
+    if(s2=="?"){
+        b=stof(s4);
+        c=stof(s6);
+        //cout<<c;
+        cout<<"F "<<fixed<<setprecision(2)<<(-b)*c;
+    }
+    else if(s4=="?"){
+        a=stof(s2);
+        c=stof(s6);
+        cout<<"K "<<fixed<<setprecision(2)<<a/(-c);
+    }
+    else
+    {
+        a=stof(s2);
+        b=stof(s4);
+        cout<<"X "<<fixed<<setprecision(2)<<a/(-b);
+    }
+    return 0;
+}`
+    },     
+
+    {
+        key: "Scrooge McDuck's vault is practically overflowing.",
+        content: `#include<iostream>
+using namespace std;
+int main()
+{
+    int p,q,r,i;
+    int c;
+    cin>>c;
+    for(i=0;i<c;i++){
+        cin>>p>>q>>r;
+        q=q+(r-1)/5;
+        r=(r-1)%5+1;
+        p=p+(q-1)/10;
+        q=(q-1)%10+1;
+        cout<<p<<" ";
+        cout<<q<<" ";
+        cout<<r<<endl;
+    }
+	return 0;
+}`
+    },     
+
+    {
+        key: "Shankar is a volleyball trainer at government scho",
+        content: `#include <bits/stdc++.h>
+using namespace std;
+typedef long long LL;
+const int N=(int)1e6+6,mod=(int)0;
+int a[N];
+long long sum[N];
+int main(){
+int tc;
+cin>>tc;
+for(int tt=1;tt<=tc;++tt){
+int n,p;
+cin>>n>>p;
+for(int j=0;j<n;++j)
+cin>>a[j];
+sort(a,a+n);
+int i;
+for(i=0;i<n;i++) sum[i+1]=sum[i]+a[i];
+long long res=1e18;
+for(int j=p-1;j<n;++j){
+long long s=sum[j+1]-sum[j-(p-1)]; long long cost=(LL)a[j]*p-s; res=min(res,cost);
+}
+cout<<res<<'\n';
+}
+}`
+    },    
+    
+    {
+        key: "Prithvi are in the world of mathematics to solve t",
+        content: `#include <bits/stdc++.h>
+using namespace std;
+int main()
+{
+ int numberOfColumns;
+ cin>>numberOfColumns;
+ int bananaMatrix[2 * numberOfColumns - 1][numberOfColumns]; //Input matrix
+ int maxBanana[2 * numberOfColumns - 1][numberOfColumns]; //Memoized matrix
+ memset(maxBanana, 0, sizeof(maxBanana)); //Setting 0 to all cell, will update for maximum
+ memset(bananaMatrix, 0, sizeof(bananaMatrix)); //Setting 0 to all cell, will update for inputs
+ //Input for upper triangle
+ for (int row = 0; row < numberOfColumns; row++)
+ for (int column = 0; column <= row; column++)
+ cin >> bananaMatrix[row][column];
+ //Input for lower triangle
+ int shiftedPosition = 1;
+ for (int row = numberOfColumns; row < (numberOfColumns * 2) - 1; row++)
+ {
+ for (int column = shiftedPosition; column < numberOfColumns; column++)
+ cin >> bananaMatrix[row][column];
+ shiftedPosition++;
+ }
+ maxBanana[0][0] = bananaMatrix[0][0];
+ for (int row = 1; row < numberOfColumns; row++)
+ {
+ for (int column = 0; column <= row; column++)
+ if (column == 0)//Caution for negative indexes.
+ maxBanana[row][column] = maxBanana[row - 1][column] +
+bananaMatrix[row][column];
+ else
+ maxBanana[row][column] = max(maxBanana[row - 1][column], maxBanana[row
+- 1][column - 1]) + bananaMatrix[row][column];
+ }
+ //Memoizing the lower triangle to store the max value
+ shiftedPosition = 1;
+ for (int row = numberOfColumns; row < (numberOfColumns * 2) - 1; row++)
+ {
+ for (int column = shiftedPosition; column < numberOfColumns; column++)
+ maxBanana[row][column] = max(maxBanana[row - 1][column], maxBanana[row -
+1][column - 1]) + bananaMatrix[row][column];
+ shiftedPosition++;
+ }
+ cout <<maxBanana[2 * numberOfColumns - 2][numberOfColumns - 1];
+
+ return 0;
+ cout<<"cin>>carrotMatrix[row][column];";
+}`
+    },    
+
 
     // this code below only clears 87% test case but is the best possible solution. Semi-working:1
     {
@@ -2485,8 +2733,10 @@ int main()
 
 // current answer base- working (contriubted by me)- 60
 // current answer base- working (from G ji account)- 20 
+// current answer base- working (from Sher ji account)- 10
 // current answer base- semi-working (contriubted by me)- 1 --> (87%, Semi-working:1)
 
-//total key data- 81
+// total working key data- 90
+// total key data- 91
 
 export default qnaDatabase;

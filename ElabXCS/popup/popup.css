@@ -267,3 +267,64 @@ background-color: #1d4ed8;
 .activation-section button:hover {
   background-color: #1d4ed8;
 }
+
+/* Dark Mode Overrides */
+.dark-mode {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+.dark-mode body {
+  background-color: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+
+.dark-mode .container {
+  background-color: #1e293b !important;
+}
+
+.dark-mode .content {
+  background-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+.dark-mode .header h1 {
+  color: #f1f5f9 !important;
+}
+
+.dark-mode button {
+  background-color: #3b82f6 !important;
+}
+
+.dark-mode textarea {
+  background-color: #475569 !important;
+  color: #f1f5f9 !important;
+  border-color: #64748b !important;
+}
+
+.dark-mode .notification {
+  background-color: #0f172a !important;
+}
+.dark-mode .notification-title {
+  color: #ffffff !important;
+}
+.dark-mode .notification-message {
+  color: #f1f5f9 !important;
+}
+.dark-mode .button:hover {
+  background-color: #345cc9 !important;
+}
+.dark-mode .secondary-btn {
+  background-color: #4b4c4f !important;
+}
+.dark-mode .custom-snippet {
+  background-color: #33334c54 !important;
+}
+.dark-mode .custom-snippet h3 {
+  color: #f1f5f9 !important;
+}
+.dark-mode .custom-snippet input{
+  background-color: #3e3636a6 !important;
+  color: #f1f5f9 !important;
+  border-color: #64748b !important;
+}

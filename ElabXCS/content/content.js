@@ -76,7 +76,6 @@
       "Question description:",
       "**Question description**",
       "**Question description**:",
-      "**Question description:**",
       "**Question description :**"
     ];
     for (const marker of markers) {
@@ -99,7 +98,7 @@
     return null;
   }
   
-  // Find matching solution from QNA database using normalized strings and a threshold of 53%
+  // Find matching solution from QNA database using normalized strings and a threshold of 83%
   function findMatchingSolution(extractedSnippet) {
     if (!extractedSnippet) return null;
     const normExtracted = normalizeText(extractedSnippet);
@@ -120,20 +119,15 @@
     return bestMatch;
   }
   
-  // Paste code into Ace editor with retry and overwrite confirmation
-  function pasteCodeWithRetry(snippet, attempt = 0) {
-    const MAX_ATTEMPTS = 5;
+  // Paste code into Ace editor immediately, overwriting any existing code.
+  function pasteCodeWithRetry(snippet) {
     if (window.ace && typeof ace.edit === "function") {
       try {
         let editorEl = document.querySelector('.ace_editor');
         if (!editorEl) throw new Error("Ace editor not found.");
         if (!editorEl.id) editorEl.id = "ace-editor";
         const editor = ace.edit(editorEl.id);
-        const existing = editor.getValue();
-        if (existing && existing !== snippet) {
-          const ok = confirm("There is already code in the editor. Overwrite?");
-          if (!ok) return;
-        }
+        // Directly overwrite any existing content
         editor.setValue(snippet, -1);
         editor.clearSelection();
         console.log("Code pasted into Ace editor");
@@ -147,22 +141,13 @@
     if (fallbackContainer) {
       const textInput = fallbackContainer.querySelector(".ace_text-input");
       if (textInput) {
-        const existingVal = textInput.value;
-        if (existingVal && existingVal !== snippet) {
-          const ok = confirm("There is already code in the editor. Overwrite?");
-          if (!ok) return;
-        }
         textInput.value = snippet;
         textInput.dispatchEvent(new Event("input", { bubbles: true }));
         console.log("Code pasted into fallback text input");
         return;
       }
     }
-    if (attempt < MAX_ATTEMPTS) {
-      setTimeout(() => pasteCodeWithRetry(snippet, attempt + 1), 500);
-    } else {
-      console.error("Failed to paste code after multiple attempts");
-    }
+    console.error("Failed to paste code because Ace editor was not found.");
   }
   
   function pasteCode(snippet) {
@@ -299,4 +284,4 @@
   if (hasAceEditor() && editModeEnabled) {
     enableEditMode();
   }
-})(); 
+})();
