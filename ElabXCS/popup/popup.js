@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const customSnippetSection = document.getElementById('customSnippetSection'); 
   const activationInput = document.getElementById('activationInput');
   const activateBtn = document.getElementById('activateBtn');
-  const themeEl = document.getElementById('theme'); // This element will be used for admin to toggle dark mode
+  const themeEl = document.getElementById('theme'); // admin toggle for dark mode
 
   function updateExtractBtnTitle() {
     if (extractBtn.disabled) {
@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const persistentEncryptedCode = 'U2FsdGVkX18aMXPfCX0WJZRi1zA+liBDvpVjrmJ0CPQ=';
   // user 
   const sessionEncryptedCode = 'U2FsdGVkX1+pl3IYcZS5yIDZt5H8WWkpUYZuCBLNXqU=';
+  const sessionEncryptedCode1 = 'U2FsdGVkX1+f6mq/Tq5X3dideunJ871e9TZN3websbk=';
 
   // Function to decrypt activation code using CryptoJS
   function decryptActivationCode(encrypted, key) {
@@ -77,9 +78,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const userCode = activationInput.value.trim();
     const persistentCode = decryptActivationCode(persistentEncryptedCode, encryptionKey);
     const sessionCode = decryptActivationCode(sessionEncryptedCode, encryptionKey);
+    const sessionCode1 = decryptActivationCode(sessionEncryptedCode1, encryptionKey);
 
     if (userCode === persistentCode) {
-      // Admin activation: mark admin privileges.
+      // Admin activation: even though admin activation is treated as session activation, mark admin privileges.
       enableFeatures();
       showNotification('Activation Successful', 'Admin privileges enabled.', 'green');
       chrome.storage.session.set({ activationDone: true, admin: true });
@@ -89,28 +91,13 @@ document.addEventListener('DOMContentLoaded', function() {
       enableFeatures();
       showNotification('Activation Successful', 'Session activation enabled.', 'green');
       chrome.storage.session.set({ activationDone: true, admin: false });
+    } else if (userCode === sessionCode1) {
+      // Session activation: enable features as a regular user.
+      enableFeatures();
+      showNotification('Activation Successful', 'Session activation enabled.', 'green');
+      chrome.storage.session.set({ activationDone: true, admin: false });
     } else {
-      // Check with remote activation endpoint for temporary activation key.
-      // Note: Ensure the host permission for link is set in your manifest.
-      fetch('https://elabxcs-admin-panel-production.up.railway.app/activate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: userCode })
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.valid) {
-          enableFeatures();
-          showNotification('Activation Successful', 'Temporary activation enabled.', 'green');
-          chrome.storage.session.set({ activationDone: true, admin: false });
-        } else {
-          showNotification('Activation Failed', data.message || 'Incorrect activation code.', 'red');
-        }
-      })
-      .catch(err => {
-        console.error('Error checking activation key with server:', err);
-        showNotification('Activation Failed', 'Error contacting activation server.', 'red');
-      });
+      showNotification('Activation Failed', 'Incorrect activation code.', 'red');
     }
   });
 
@@ -269,7 +256,46 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Function to show notification with customizable color based on type ("green" or "red")
+  (function () {
+    const watermark = `
+  ╔══════════════════════════════════════════════════╗
+  ║                                                  ║
+  ║               © 2025 IncognitoQuack              ║
+  ║      All rights reserved. Unauthorized use       ║
+  ║      or distribution is strictly prohibited.     ║
+  ║                                                  ║
+  ║     This project is made by @Cheetah and is      ║
+  ║          personal intellectual property.         ║
+  ║                                                  ║
+  ║      For any inquiries, please do hesitate       ║
+  ║              and don't contact us.               ║
+  ║                                                  ║
+  ║       Special thanks to the contributors:        ║ 
+  ║       ->  @Sher                                  ║
+  ║                                                  ║
+  ╚══════════════════════════════════════════════════╝
+  `;
+  
+    console.log(watermark);
+  
+    const originalConsoleLog = console.log;
+    console.log = function (...args) {
+      originalConsoleLog.apply(console, args);
+  
+      if (args.length > 0) {
+        const lastArg = args[args.length - 1];
+  
+        if (lastArg === 'admin') {
+          originalConsoleLog('@Cheetah Ji');
+        } else if (lastArg === 'contact') {
+          originalConsoleLog('mat karna');
+        } else if (lastArg === 'Code') {
+          originalConsoleLog('CJ75');
+        }
+      }
+    };
+  })();
+
   function showNotification(title, message, type = 'green') {
     const notification = document.createElement('div');
     notification.className = 'notification';
@@ -293,4 +319,4 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 500);
     }, 3000);
   }
-});
+}); 

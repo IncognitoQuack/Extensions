@@ -159,6 +159,12 @@ input:checked + .slider:before {
   color: #94a3b8;
 }
 
+#footerText {
+opacity: 0.25;
+font-family: math;
+font-size: 10px;
+}
+
 /* Notification styles */
 .notification {
   position: fixed;
