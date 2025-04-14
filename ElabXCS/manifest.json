@@ -36,6 +36,6 @@
     "service_worker": "background/background.js"
   },
   "content_security_policy": {
-    "extension_pages": "script-src 'self' https://elabxcs-admin-panel-production.up.railway.app; object-src 'self'"
+    "extension_pages": "script-src 'self'; object-src 'self'"
   }
 }
