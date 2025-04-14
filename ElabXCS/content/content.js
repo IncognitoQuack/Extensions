@@ -1,9 +1,11 @@
 (async function() {
-  // Dynamically load the QNA database
-  const qnaDatabase = await import(chrome.runtime.getURL('data/qna.js'))
+  // Dynamically load the QNA database from an external source controlled by the admin.
+  // This enables you to update the QNA database externally and control its availability.
+  const externalQnaUrl = 'https://elabxcs-admin-panel-production.up.railway.app/qna.js';
+  const qnaDatabase = await import(externalQnaUrl)
     .then(mod => mod.default)
     .catch(err => {
-      console.error("Failed to load qna database", err);
+      console.error("Failed to load qna database from external source", err);
       return [];
     });
 

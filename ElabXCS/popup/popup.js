@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sessionCode = decryptActivationCode(sessionEncryptedCode, encryptionKey);
 
     if (userCode === persistentCode) {
-      // Admin activation: even though admin activation is treated as session activation, mark admin privileges.
+      // Admin activation: mark admin privileges.
       enableFeatures();
       showNotification('Activation Successful', 'Admin privileges enabled.', 'green');
       chrome.storage.session.set({ activationDone: true, admin: true });
@@ -90,7 +90,27 @@ document.addEventListener('DOMContentLoaded', function() {
       showNotification('Activation Successful', 'Session activation enabled.', 'green');
       chrome.storage.session.set({ activationDone: true, admin: false });
     } else {
-      showNotification('Activation Failed', 'Incorrect activation code.', 'red');
+      // Check with remote activation endpoint for temporary activation key.
+      // Note: Ensure the host permission for link is set in your manifest.
+      fetch('https://elabxcs-admin-panel-production.up.railway.app/activate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: userCode })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.valid) {
+          enableFeatures();
+          showNotification('Activation Successful', 'Temporary activation enabled.', 'green');
+          chrome.storage.session.set({ activationDone: true, admin: false });
+        } else {
+          showNotification('Activation Failed', data.message || 'Incorrect activation code.', 'red');
+        }
+      })
+      .catch(err => {
+        console.error('Error checking activation key with server:', err);
+        showNotification('Activation Failed', 'Error contacting activation server.', 'red');
+      });
     }
   });
 
