@@ -1,6 +1,6 @@
 # ElabXCS
 
-**ElabXCS** is a Chrome extension built to help bypass Elab's security measures and extract solution snippets from dataabse. The current set of answers is limited, but your contributions can empower our community and expand our solution database. We encourage you to share your solutions and help us improve this tool for everyone.
+**ElabXCS** is a Chrome extension built to help bypass Elab's security measures and extract solution snippets from database. The current set of answers is limited, but your contributions can empower our community and expand our solution database. We encourage you to share your solutions and help us improve this tool for everyone.
 
 ## Features
 
