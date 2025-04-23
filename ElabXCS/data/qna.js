@@ -2701,7 +2701,35 @@ bananaMatrix[row][column];
  return 0;
  cout<<"cin>>carrotMatrix[row][column];";
 }`
-    },    
+    },   
+
+    // dp bhai
+
+{
+        key: "Padmavati is a clever girl and she wants to partic",
+        content: `#include <iostream>
+#include <map>
+using namespace std;
+const int N=1<<20;
+int n,a[N],c[N],w;
+void upd(int i,int c){
+}
+int main(){
+ cin>>n;
+ for(int i=0;i<n;++i)cin>>a[i];
+ map<int,int>u,v;
+ for(int i=n;i-->0;){
+ int x=++u[a[i]];
+ while(x<N)++c[x],x+=x&-x;
+ }
+ for(int i=0;i<n;++i){
+ int x=u[a[i]]--,y=v[a[i]]++;
+ while(x<N)--c[x],x+=x&-x;
+ while(y>0)w+=c[y],y-=y&-y;
+ }
+ cout<<w<<endl;
+}`
+    },  	
 
 
     // this code below only clears 87% test case but is the best possible solution. Semi-working:1
@@ -2734,9 +2762,10 @@ bananaMatrix[row][column];
 // current answer base- working (contriubted by me)- 60
 // current answer base- working (from G ji account)- 20 
 // current answer base- working (from Sher ji account)- 10
+// dp bhai - 1
 // current answer base- semi-working (contriubted by me)- 1 --> (87%, Semi-working:1)
 
-// total working key data- 90
-// total key data- 91
+// total working key data- 91
+// total key data- 92
 
 export default qnaDatabase;
