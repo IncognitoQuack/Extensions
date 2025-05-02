@@ -2701,11 +2701,11 @@ bananaMatrix[row][column];
  return 0;
  cout<<"cin>>carrotMatrix[row][column];";
 }`
-    },   
+    },    
 
-    // dp bhai
+    // DP bhai ka account
 
-{
+    {
         key: "Padmavati is a clever girl and she wants to partic",
         content: `#include <iostream>
 #include <map>
@@ -2729,7 +2729,23 @@ int main(){
  }
  cout<<w<<endl;
 }`
-    },  	
+    }, 
+    
+    // capybara ka account
+    
+    {
+        key: "Students in a class are making towers of blocks. E",
+        content: `#include<iostream>
+using namespace std;
+int m, n, x=1;
+int main()
+{
+cin>>n>>m;
+while ((x/2) < n || (x/3) < m|| (x/2) +( x/3) - (x/6) < (m+n))
+++x;
+cout << x;
+}`
+    },    
 
 
     // this code below only clears 87% test case but is the best possible solution. Semi-working:1
@@ -2762,10 +2778,11 @@ int main(){
 // current answer base- working (contriubted by me)- 60
 // current answer base- working (from G ji account)- 20 
 // current answer base- working (from Sher ji account)- 10
-// dp bhai - 1
+// current answer base- working (from DP bhai account)- 1
+// current answer base- working (from capybara account)- 1
 // current answer base- semi-working (contriubted by me)- 1 --> (87%, Semi-working:1)
 
-// total working key data- 91
-// total key data- 92
+// total working key data- 92
+// total key data- 93
 
 export default qnaDatabase;
